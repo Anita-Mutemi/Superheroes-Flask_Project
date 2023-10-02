@@ -1,6 +1,7 @@
+import random
 from random import randint
 from app import db
-from models import Hero, Power, HeroPower
+from app.models import Hero, Power, HeroPower
 
 print ("🦸‍♀️ Seeding powers...")
 powers = [
