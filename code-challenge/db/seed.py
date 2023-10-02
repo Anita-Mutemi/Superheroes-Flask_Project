@@ -1,3 +1,4 @@
+from random import randint
 from app import db
 from models import Hero, Power, HeroPower
 
@@ -25,16 +26,17 @@ heroes= [
 ]
 db.session.add_all(heroes)
 
-print("🦸‍♀️ Adding powers to heroes...")
+print("Adding powers to heroes...")
 strengths = ["Strong", "Weak", "Average"]
 
-Hero.all.each do |hero|
-  rand(1..3).times do
-    # get a random power
-    power = Power.find(Power.pluck(:id).sample)
+for hero in heroes:
+  for _ in range(randint(1,3)): 
+    power = Power.query.order_by(db.func.random()).first()
+    db.session.add(HeroPower(
+      hero=hero, 
+      power=power,
+      strength=random.choice(strengths)  
+    ))
 
-    HeroPower.create!(hero_id: hero.id, power_id: power.id, strength: strengths.sample)
-  end
-end
-
-puts "🦸‍♀️ Done seeding!"
+db.session.commit()  
+print("Done seeding!")
