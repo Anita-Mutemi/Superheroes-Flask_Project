@@ -21,8 +21,12 @@ with app.app_context():
     ]
 
     for power_data in powers:
-        power = Power(**power_data)
-        db.session.add(power)
+        # Check if the power with the same name exists
+        existing_power = Power.query.filter_by(name=power_data['name']).first()
+        
+        if not existing_power:
+            power = Power(**power_data)
+            db.session.add(power)
 
     print("🦸‍♀️ Seeding heroes...")
     heroes = [
@@ -48,8 +52,11 @@ with app.app_context():
     for hero in Hero.query.all():
         # Randomly assign 1 to 3 powers to each hero
         for _ in range(1, 4):
-            # Use Session.get()
-            power = session.get(Power, random.randint(1, len(powers)))
+            # Generate a random power ID
+            random_power_id = random.randint(1, len(powers))
+
+            # Check if the power with the generated ID exists
+            power = session.get(Power, random_power_id)
 
             # Check if the power was found
             if power is not None:
