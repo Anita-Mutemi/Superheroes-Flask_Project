@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from flask import Flask, make_response, request, jsonify
 from flask_migrate import Migrate
+from flask_cors import CORS
 from models import db, Hero, Power, HeroPower
 
 def create_app():
@@ -11,6 +12,8 @@ def create_app():
     migrate = Migrate(app, db)
 
     db.init_app(app)
+
+    CORS(app)
 
     # Define routes here
 
